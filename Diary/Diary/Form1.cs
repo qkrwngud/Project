@@ -42,6 +42,13 @@ namespace Diary
     }
 
 
+    /*
+     * 현재 확인된 버그 한개
+     * 폰트 크기를 바꾸다보면 0번째 TextBox위치가 점점 아래로 내려옴
+     
+     */
+
+
 }
 
 namespace Suisei
@@ -76,6 +83,7 @@ namespace Suisei
                 Tb.Text = (TextBoxList.Count).ToString();
                 Tb.Width = 800;
                 Tb.KeyDown += new KeyEventHandler(Text_KeyDown);
+                Tb.Enter += new EventHandler(Text_Enter);
 
                 TextBoxList.Add(Tb);
                 panel.Controls.Add(Tb);
@@ -111,6 +119,14 @@ namespace Suisei
             return Tb;
         }
 
+
+        private void ReLoadTextBoxes()
+        {
+            for (int i = 0; i < TextBoxList.Count; ++i)
+            {
+                TextBoxList[i].Location = new System.Drawing.Point(0, i * BoxHeight);
+            }
+        }
         private void Text_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -120,18 +136,15 @@ namespace Suisei
                     AddTextBoxes(5);
                 }
                 ++CurrentCursorLoc;
-                Console.WriteLine(panel.Controls.Count);
                 TextBoxList[CurrentCursorLoc].Focus();
             }
         }
 
-        private void ReLoadTextBoxes()
+        private void Text_Enter(object sender, EventArgs e)
         {
-            for (int i = 0; i < TextBoxList.Count; ++i)
-            {
-                TextBoxList[i].Location = new System.Drawing.Point(0, i * BoxHeight);
-            }
+            TextBox Tb = (TextBox)sender;
+            CurrentCursorLoc = Int32.Parse(Tb.Name);
+            Console.WriteLine(Tb.Text);
         }
-
     }
 }
