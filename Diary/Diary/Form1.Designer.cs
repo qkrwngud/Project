@@ -49,13 +49,17 @@
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.MainTextBox = new System.Windows.Forms.TextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.MainTextPanel = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.MainTextPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -104,7 +108,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(855, 24);
-            this.menuStrip1.TabIndex = 2;
+            this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // 파일ToolStripMenuItem
@@ -125,7 +129,6 @@
             this.새로만들기.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.새로만들기.Size = new System.Drawing.Size(272, 22);
             this.새로만들기.Text = "새로만들기 (&N)";
-            this.새로만들기.Click += new System.EventHandler(this.새로만들기_Click);
             // 
             // 열기
             // 
@@ -133,7 +136,6 @@
             this.열기.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.열기.Size = new System.Drawing.Size(272, 22);
             this.열기.Text = "열기 (&O)";
-            this.열기.Click += new System.EventHandler(this.열기OToolStripMenuItem_Click);
             // 
             // 저장
             // 
@@ -141,7 +143,6 @@
             this.저장.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.저장.Size = new System.Drawing.Size(272, 22);
             this.저장.Text = "저장 (&S)";
-            this.저장.Click += new System.EventHandler(this.저장SToolStripMenuItem_Click);
             // 
             // 다른이름으로저장
             // 
@@ -150,14 +151,13 @@
             | System.Windows.Forms.Keys.S)));
             this.다른이름으로저장.Size = new System.Drawing.Size(272, 22);
             this.다른이름으로저장.Text = "다른 이름으로 저장 (&A)";
-            this.다른이름으로저장.Click += new System.EventHandler(this.다른이름으로저장ToolStripMenuItem_Click);
             // 
             // 끝내기
             // 
             this.끝내기.Name = "끝내기";
             this.끝내기.Size = new System.Drawing.Size(272, 22);
             this.끝내기.Text = "끝내기 (&X)";
-            this.끝내기.Click += new System.EventHandler(this.끝내기XToolStripMenuItem_Click);
+            this.끝내기.Click += new System.EventHandler(this.끝내기_Click);
             // 
             // 서식OToolStripMenuItem
             // 
@@ -200,9 +200,9 @@
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(35, 16);
             this.radioButton3.TabIndex = 2;
+            this.radioButton3.TabStop = true;
             this.radioButton3.Text = "눈";
             this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
             // 
             // radioButton2
             // 
@@ -212,9 +212,9 @@
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(35, 16);
             this.radioButton2.TabIndex = 1;
+            this.radioButton2.TabStop = true;
             this.radioButton2.Text = "비";
             this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // radioButton1
             // 
@@ -229,19 +229,6 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "맑음";
             this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // MainTextBox
-            // 
-            this.MainTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.MainTextBox.Location = new System.Drawing.Point(12, 86);
-            this.MainTextBox.Multiline = true;
-            this.MainTextBox.Name = "MainTextBox";
-            this.MainTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.MainTextBox.Size = new System.Drawing.Size(831, 390);
-            this.MainTextBox.TabIndex = 4;
             // 
             // statusStrip1
             // 
@@ -256,12 +243,45 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.MainTextPanel);
+            this.groupBox4.Location = new System.Drawing.Point(13, 86);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(831, 390);
+            this.groupBox4.TabIndex = 4;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "내용";
+            // 
+            // MainTextPanel
+            // 
+            this.MainTextPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.MainTextPanel.AutoScroll = true;
+            this.MainTextPanel.Controls.Add(this.textBox1);
+            this.MainTextPanel.Location = new System.Drawing.Point(2, 15);
+            this.MainTextPanel.Name = "MainTextPanel";
+            this.MainTextPanel.Size = new System.Drawing.Size(827, 370);
+            this.MainTextPanel.TabIndex = 0;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(447, 64);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(240, 206);
+            this.textBox1.TabIndex = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(855, 501);
-            this.Controls.Add(this.MainTextBox);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox2);
@@ -270,7 +290,8 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(871, 540);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "3";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -278,6 +299,9 @@
             this.menuStrip1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.MainTextPanel.ResumeLayout(false);
+            this.MainTextPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -303,11 +327,13 @@
         private System.Windows.Forms.ToolStripMenuItem 저장;
         private System.Windows.Forms.ToolStripMenuItem 다른이름으로저장;
         private System.Windows.Forms.ToolStripMenuItem 끝내기;
-        private System.Windows.Forms.TextBox MainTextBox;
         private System.Windows.Forms.ToolStripMenuItem 서식OToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 글꼴FToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Panel MainTextPanel;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
