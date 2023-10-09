@@ -8,3 +8,14 @@ C:\Users\juhyu\Desktop\Project\Diary\Diary\obj\Debug\Diary.csproj.GenerateResour
 C:\Users\juhyu\Desktop\Project\Diary\Diary\obj\Debug\Diary.csproj.CoreCompileInputs.cache
 C:\Users\juhyu\Desktop\Project\Diary\Diary\obj\Debug\Diary.exe
 C:\Users\juhyu\Desktop\Project\Diary\Diary\obj\Debug\Diary.pdb
+C:\Users\ai_student\Desktop\Project\Diary\Diary\bin\Debug\Diary.exe.config
+C:\Users\ai_student\Desktop\Project\Diary\Diary\bin\Debug\Diary.exe
+C:\Users\ai_student\Desktop\Project\Diary\Diary\bin\Debug\Diary.pdb
+C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.csproj.AssemblyReference.cache
+C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.csproj.SuggestedBindingRedirects.cache
+C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.Form1.resources
+C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.Properties.Resources.resources
+C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.csproj.GenerateResource.cache
+C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.csproj.CoreCompileInputs.cache
+C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.exe
+C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.pdb

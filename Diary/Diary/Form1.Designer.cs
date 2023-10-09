@@ -53,13 +53,11 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.MainTextPanel = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.MainTextPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -129,6 +127,7 @@
             this.새로만들기.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.새로만들기.Size = new System.Drawing.Size(272, 22);
             this.새로만들기.Text = "새로만들기 (&N)";
+            this.새로만들기.Click += new System.EventHandler(this.새로만들기_Click);
             // 
             // 열기
             // 
@@ -136,6 +135,7 @@
             this.열기.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.열기.Size = new System.Drawing.Size(272, 22);
             this.열기.Text = "열기 (&O)";
+            this.열기.Click += new System.EventHandler(this.열기_Click);
             // 
             // 저장
             // 
@@ -143,6 +143,7 @@
             this.저장.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.저장.Size = new System.Drawing.Size(272, 22);
             this.저장.Text = "저장 (&S)";
+            this.저장.Click += new System.EventHandler(this.저장_Click);
             // 
             // 다른이름으로저장
             // 
@@ -151,6 +152,7 @@
             | System.Windows.Forms.Keys.S)));
             this.다른이름으로저장.Size = new System.Drawing.Size(272, 22);
             this.다른이름으로저장.Text = "다른 이름으로 저장 (&A)";
+            this.다른이름으로저장.Click += new System.EventHandler(this.다른이름으로저장_Click);
             // 
             // 끝내기
             // 
@@ -262,19 +264,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MainTextPanel.AutoScroll = true;
-            this.MainTextPanel.Controls.Add(this.textBox1);
             this.MainTextPanel.Location = new System.Drawing.Point(2, 15);
             this.MainTextPanel.Name = "MainTextPanel";
             this.MainTextPanel.Size = new System.Drawing.Size(827, 370);
             this.MainTextPanel.TabIndex = 0;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(447, 64);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(240, 206);
-            this.textBox1.TabIndex = 0;
             // 
             // Form1
             // 
@@ -300,8 +293,6 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
-            this.MainTextPanel.ResumeLayout(false);
-            this.MainTextPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -333,7 +324,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Panel MainTextPanel;
-        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

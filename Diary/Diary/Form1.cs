@@ -12,13 +12,17 @@ namespace Diary
 
         Suisei.TextBoxes Tboxes = new Suisei.TextBoxes();
 
+        string FileName = "";
+
+        int ContentsBoxCount = 25;
+
         public Form1()
         {
             InitializeComponent();
 
             this.Text = "테스트";
             Tboxes.SetPanel(MainTextPanel);
-            Tboxes.AddTextBoxes(50);
+            Tboxes.AddTextBox(ContentsBoxCount);
 
         }
 
@@ -28,8 +32,7 @@ namespace Diary
 
         private void 끝내기_Click(object sender, EventArgs e)
         {
-            textBox1.Text = Tboxes.GetTextBoxes().Text;
-            
+            Tboxes.AddTextBox(5);
         }
 
         private void 글꼴FToolStripMenuItem_Click(object sender, EventArgs e)
@@ -39,15 +42,52 @@ namespace Diary
             Tboxes.SetFont(fontDialog1.Font);
 
         }
+
+        private void 새로만들기_Click(object sender, EventArgs e)
+        {
+            TitleBox.Text = "";
+            Tboxes.ResetTextBoxes(ContentsBoxCount);
+        }
+
+        private void 열기_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+            openFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
+
+            FileName = openFileDialog1.FileName;
+
+            string Data = System.IO.File.ReadAllText(openFileDialog1.FileName);
+
+        }
+
+        private void 저장_Click(object sender, EventArgs e)
+        {
+            if (FileName == "")
+            {
+                saveFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
+
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    System.IO.File.WriteAllText(saveFileDialog1.FileName, Tboxes.GetTextOfList().Text);
+                    FileName = saveFileDialog1.FileName;
+                }
+            }
+            else
+            {
+                System.IO.File.WriteAllText(FileName, Tboxes.GetTextOfList().Text);
+            }
+        }
+
+        private void 다른이름으로저장_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, Tboxes.GetTextOfList().Text);
+            }
+        }
     }
-
-
-    /*
-     * 현재 확인된 버그 한개
-     * 폰트 크기를 바꾸다보면 0번째 TextBox위치가 점점 아래로 내려옴
-     
-     */
-
 
 }
 
@@ -57,24 +97,30 @@ namespace Suisei
     {
 
         private List<TextBox> TextBoxList = new List<TextBox>(); // TextBox 저장하는 List
-        private int CurrentCursorLoc = 0;
+        private int CurrentCursorLoc;
 
         private Panel panel;
+        private int BoxHeight;
 
-        int BoxHeight = 20; // 폰트 크기가 9일때 TextBox의 기본 높이
+        private Font DefaultFont;
 
         public TextBoxes()
         {
-
+            CurrentCursorLoc= 0;
+            BoxHeight = 21;
+            panel = null;
+            DefaultFont = null;
         }
 
         public void SetPanel(Panel MainTextPanel)
         {
             panel = MainTextPanel;
+            DefaultFont = panel.Font;
         }
 
-        // 매개변수 만큼 TextBox를 만드는 메소드
-        public void AddTextBoxes(int TextBoxCount)
+
+        // TextBoxCount만큼 TextBox를 만드는 메소드
+        public void AddTextBox(int TextBoxCount)
         {
             for (int i = 0; i < TextBoxCount; ++i)
             {
@@ -82,14 +128,15 @@ namespace Suisei
                 Tb.Name = (TextBoxList.Count).ToString();
                 Tb.Text = (TextBoxList.Count).ToString();
                 Tb.Width = 800;
+                Tb.Location = new Point(0, TextBoxList.Count * BoxHeight);
+
                 Tb.KeyDown += new KeyEventHandler(Text_KeyDown);
                 Tb.Enter += new EventHandler(Text_Enter);
 
                 TextBoxList.Add(Tb);
                 panel.Controls.Add(Tb);
             }
-
-            ReLoadTextBoxes();
+            TextBoxResize();
         }
 
         // 폰트를 받아와서 적용시키는 메소드
@@ -99,13 +146,15 @@ namespace Suisei
 
             BoxHeight = TextBoxList[0].Size.Height;
 
-            ReLoadTextBoxes();
+
+
+            TextBoxResize();
 
         }
 
-        // TextBoxList의 원소인 TextBox들의 Text를 한개의 TextBox에 옮겨서 반환
         // 내용을 파일에 저장할때 사용하는 메소드
-        public TextBox GetTextBoxes()
+        // TextBoxList의 원소인 TextBox들의 Text를 한개의 TextBox에 옮겨서 반환
+        public TextBox GetTextOfList()
         {
             TextBox Tb = new TextBox();
             Tb.Multiline = true;
@@ -119,21 +168,48 @@ namespace Suisei
             return Tb;
         }
 
-
-        private void ReLoadTextBoxes()
+        public void ResetTextBoxes(int TextBoxCount)
         {
+            panel.Font = DefaultFont;
+
             for (int i = 0; i < TextBoxList.Count; ++i)
             {
-                TextBoxList[i].Location = new System.Drawing.Point(0, i * BoxHeight);
+                if (i >= TextBoxCount)
+                {
+                    panel.Controls.Remove(TextBoxList[i]);
+                    TextBoxList.RemoveAt(i);
+
+                    continue;
+                }
+
+                TextBoxList[i].Text = "";
+            }
+
+            TextBoxResize();
+
+        }
+
+
+        // TextBox 높이 재설정
+        private void TextBoxResize()
+        {
+
+            int ScrollValue = panel.VerticalScroll.Value;
+
+            for (int i = 1; i < TextBoxList.Count; ++i)
+            {
+                TextBoxList[i].Location = new Point(0, i * TextBoxList[0].Height - ScrollValue);
             }
         }
+
+
         private void Text_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 if (CurrentCursorLoc >= TextBoxList.Count - 1)
                 {
-                    AddTextBoxes(5);
+                    AddTextBox(5);
                 }
                 ++CurrentCursorLoc;
                 TextBoxList[CurrentCursorLoc].Focus();
@@ -144,7 +220,6 @@ namespace Suisei
         {
             TextBox Tb = (TextBox)sender;
             CurrentCursorLoc = Int32.Parse(Tb.Name);
-            Console.WriteLine(Tb.Text);
         }
     }
 }
