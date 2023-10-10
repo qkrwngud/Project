@@ -213,7 +213,7 @@ namespace Suisei
 
         private void Text_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Down || e.KeyCode == Keys.Right)
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Down)
             {
                 if (CurrentCursorLoc >= TextBoxList.Count - 1)
                 {
@@ -221,18 +221,22 @@ namespace Suisei
                     {
                         AddTextBox(5);
                     }
+                    else
+                    {
+                        return;
+                    }
                 }
                 ++CurrentCursorLoc;
                 TextBoxList[CurrentCursorLoc].Focus();
             }
-            else if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Up || e.KeyCode == Keys.Left)
+            else if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Up)
             {
                 if (CurrentCursorLoc <= 0)
                 {
                     return;
                 }
 
-                if (TextBoxList[CurrentCursorLoc].Text == "" || e.KeyCode == Keys.Up || e.KeyCode == Keys.Left)
+                if (TextBoxList[CurrentCursorLoc].Text == "" || e.KeyCode == Keys.Up)
                 {
                     --CurrentCursorLoc;
                     TextBoxList[CurrentCursorLoc].Focus();
