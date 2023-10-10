@@ -16,6 +16,9 @@ namespace Diary
 
         int ContentsBoxCount = 25;
 
+        DateTime Date;
+
+
         public Form1()
         {
             InitializeComponent();
@@ -86,6 +89,11 @@ namespace Diary
             {
                 System.IO.File.WriteAllText(saveFileDialog1.FileName, Tboxes.GetTextOfList().Text);
             }
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            Date = dateTimePicker1.Value;
         }
     }
 
@@ -205,15 +213,32 @@ namespace Suisei
 
         private void Text_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Down || e.KeyCode == Keys.Right)
             {
                 if (CurrentCursorLoc >= TextBoxList.Count - 1)
                 {
-                    AddTextBox(5);
+                    if (e.KeyCode == Keys.Enter)
+                    {
+                        AddTextBox(5);
+                    }
                 }
                 ++CurrentCursorLoc;
                 TextBoxList[CurrentCursorLoc].Focus();
             }
+            else if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Up || e.KeyCode == Keys.Left)
+            {
+                if (CurrentCursorLoc <= 0)
+                {
+                    return;
+                }
+
+                if (TextBoxList[CurrentCursorLoc].Text == "" || e.KeyCode == Keys.Up || e.KeyCode == Keys.Left)
+                {
+                    --CurrentCursorLoc;
+                    TextBoxList[CurrentCursorLoc].Focus();
+                }
+            }
+            
         }
 
         private void Text_Enter(object sender, EventArgs e)

@@ -97,6 +97,7 @@
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(188, 21);
             this.dateTimePicker1.TabIndex = 0;
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // menuStrip1
             // 
@@ -172,7 +173,7 @@
             // 글꼴FToolStripMenuItem
             // 
             this.글꼴FToolStripMenuItem.Name = "글꼴FToolStripMenuItem";
-            this.글꼴FToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.글꼴FToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.글꼴FToolStripMenuItem.Text = "글꼴(&F)";
             this.글꼴FToolStripMenuItem.Click += new System.EventHandler(this.글꼴FToolStripMenuItem_Click);
             // 
