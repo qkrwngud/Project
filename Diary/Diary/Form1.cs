@@ -35,15 +35,19 @@ namespace Diary
 
         private void 끝내기_Click(object sender, EventArgs e)
         {
+<<<<<<< Updated upstream
             Tboxes.AddTextBox(5);
+=======
+            
+>>>>>>> Stashed changes
         }
 
         private void 글꼴FToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fontDialog1.ShowDialog(this);
             //TitleBox.Font = fontDialog1.Font;
+            MainTextPanel.Location = new Point(2, 15);
             Tboxes.SetFont(fontDialog1.Font);
-
         }
 
         private void 새로만들기_Click(object sender, EventArgs e)
@@ -104,13 +108,21 @@ namespace Suisei
     public class TextBoxes
     {
 
+<<<<<<< Updated upstream
         private List<TextBox> TextBoxList = new List<TextBox>(); // TextBox 저장하는 List
         private int CurrentCursorLoc;
+=======
+        private int CurrentCursorLoc = 0;
+>>>>>>> Stashed changes
 
         private Panel panel;
         private int BoxHeight;
 
+<<<<<<< Updated upstream
         private Font DefaultFont;
+=======
+        int BoxHeight = 21; // 폰트 크기가 9일때 TextBox의 기본 높이
+>>>>>>> Stashed changes
 
         public TextBoxes()
         {
@@ -133,18 +145,24 @@ namespace Suisei
             for (int i = 0; i < TextBoxCount; ++i)
             {
                 TextBox Tb = new TextBox();
-                Tb.Name = (TextBoxList.Count).ToString();
-                Tb.Text = (TextBoxList.Count).ToString();
+                Tb.Name = (panel.Controls.Count).ToString();
+                Tb.Text = (panel.Controls.Count).ToString();
                 Tb.Width = 800;
+<<<<<<< Updated upstream
                 Tb.Location = new Point(0, TextBoxList.Count * BoxHeight);
+=======
+                Tb.Location = new Point(0, panel.Controls.Count * BoxHeight);
+>>>>>>> Stashed changes
 
                 Tb.KeyDown += new KeyEventHandler(Text_KeyDown);
                 Tb.Enter += new EventHandler(Text_Enter);
 
-                TextBoxList.Add(Tb);
                 panel.Controls.Add(Tb);
             }
+<<<<<<< Updated upstream
             TextBoxResize();
+=======
+>>>>>>> Stashed changes
         }
 
         // 폰트를 받아와서 적용시키는 메소드
@@ -152,7 +170,7 @@ namespace Suisei
         {
             panel.Font = Font;
 
-            BoxHeight = TextBoxList[0].Size.Height;
+            BoxHeight = panel.Controls[0].Size.Height;
 
 
 
@@ -168,14 +186,15 @@ namespace Suisei
             Tb.Multiline = true;
             Tb.Text = "";
 
-            for (int i = 0; i < TextBoxList.Count; ++i)
+            for (int i = 0; i < panel.Controls.Count; ++i)
             {
-                Tb.Text += TextBoxList[i].Text + "\r\n";
+                Tb.Text += panel.Controls[i].Text + "\r\n";
             }
 
             return Tb;
         }
 
+<<<<<<< Updated upstream
         public void ResetTextBoxes(int TextBoxCount)
         {
             panel.Font = DefaultFont;
@@ -211,28 +230,44 @@ namespace Suisei
         }
 
 
+=======
+        private void ReLoadTextBoxes()
+        {
+            Console.Clear();
+            for (int i = 0; i < panel.Controls.Count; ++i)
+            {
+                panel.Controls[i].Location = new System.Drawing.Point(0, i * BoxHeight);
+                Console.WriteLine(panel.Controls[i].Name);
+            }
+        }
+
+>>>>>>> Stashed changes
         private void Text_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Down || e.KeyCode == Keys.Right)
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Down)
             {
-                if (CurrentCursorLoc >= TextBoxList.Count - 1)
+                if (CurrentCursorLoc >= panel.Controls.Count - 1)
                 {
                     if (e.KeyCode == Keys.Enter)
                     {
                         AddTextBox(5);
                     }
+                    else
+                    {
+                        return;
+                    }
                 }
                 ++CurrentCursorLoc;
-                TextBoxList[CurrentCursorLoc].Focus();
+                panel.Controls[CurrentCursorLoc].Focus();
             }
-            else if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Up || e.KeyCode == Keys.Left)
+            else if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Up)
             {
                 if (CurrentCursorLoc <= 0)
                 {
                     return;
                 }
 
-                if (TextBoxList[CurrentCursorLoc].Text == "" || e.KeyCode == Keys.Up || e.KeyCode == Keys.Left)
+                if (TextBoxList[CurrentCursorLoc].Text == "" || e.KeyCode == Keys.Up)
                 {
                     --CurrentCursorLoc;
                     TextBoxList[CurrentCursorLoc].Focus();
