@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Suisei;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -12,11 +14,14 @@ namespace Diary
 
         Suisei.TextBoxes Tboxes = new Suisei.TextBoxes();
 
+        string FileTItle = "";
         string FileName = "";
 
-        int ContentsBoxCount = 25;
+        int ContentsBoxCount = 10;
 
-        DateTime Date;
+        Font DefaultFontData;
+
+        string Weather = "맑음";
 
 
         public Form1()
@@ -25,7 +30,10 @@ namespace Diary
 
             this.Text = "테스트";
             Tboxes.SetPanel(MainTextPanel);
-            Tboxes.AddTextBox(ContentsBoxCount);
+            Tboxes.SetTextBox(ContentsBoxCount);
+            radioButton1.Checked = true;
+
+            DefaultFontData = MainTextPanel.Font;
 
         }
 
@@ -35,17 +43,12 @@ namespace Diary
 
         private void 끝내기_Click(object sender, EventArgs e)
         {
-<<<<<<< Updated upstream
-            Tboxes.AddTextBox(5);
-=======
-            
->>>>>>> Stashed changes
+
         }
 
         private void 글꼴FToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fontDialog1.ShowDialog(this);
-            //TitleBox.Font = fontDialog1.Font;
             MainTextPanel.Location = new Point(2, 15);
             Tboxes.SetFont(fontDialog1.Font);
         }
@@ -53,7 +56,14 @@ namespace Diary
         private void 새로만들기_Click(object sender, EventArgs e)
         {
             TitleBox.Text = "";
-            Tboxes.ResetTextBoxes(ContentsBoxCount);
+
+            Tboxes = new Suisei.TextBoxes();
+            Tboxes.SetPanel(MainTextPanel);
+            Tboxes.AddTextBox(ContentsBoxCount);
+
+            radioButton1.Checked = true;
+            dateTimePicker1.Value = DateTime.Now;
+            MainTextPanel.Font = DefaultFontData;
         }
 
         private void 열기_Click(object sender, EventArgs e)
@@ -62,8 +72,29 @@ namespace Diary
             openFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
 
             FileName = openFileDialog1.FileName;
+            FileTItle = Path.GetFileNameWithoutExtension(FileName);
+            this.Text = FileTItle;
 
-            string Data = System.IO.File.ReadAllText(openFileDialog1.FileName);
+            TextBox TB= new TextBox();
+            TB.Text = System.IO.File.ReadAllText(openFileDialog1.FileName);
+
+
+            TitleBox.Text = TB.Lines[0];
+
+            DateTime NewDate = Convert.ToDateTime(TB.Lines[1]);
+            dateTimePicker1.Value = NewDate;
+
+            if (TB.Lines[2] == "맑음") radioButton1.Checked = true;
+            else if (TB.Lines[2] == "비") radioButton2.Checked = true;
+            else radioButton3.Checked = true;
+
+            int ContentsLengt = TB.Lines.Length - 3;
+            Tboxes.SetTextBox(ContentsLengt);
+
+            for (int i = 3; i  < ContentsLengt; i++)
+            {
+                Tboxes.TextBoxList[i].Text = TB.Lines[i];
+            }
 
         }
 
@@ -72,16 +103,19 @@ namespace Diary
             if (FileName == "")
             {
                 saveFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
+                saveFileDialog1.FileName = TitleBox.Text;
 
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    System.IO.File.WriteAllText(saveFileDialog1.FileName, Tboxes.GetTextOfList().Text);
+                    System.IO.File.WriteAllText(saveFileDialog1.FileName, SaveText().Text);
                     FileName = saveFileDialog1.FileName;
+                    FileTItle = Path.GetFileNameWithoutExtension(FileName);
+                    this.Text = FileTItle;
                 }
             }
             else
             {
-                System.IO.File.WriteAllText(FileName, Tboxes.GetTextOfList().Text);
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, SaveText().Text);
             }
         }
 
@@ -91,13 +125,43 @@ namespace Diary
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                System.IO.File.WriteAllText(saveFileDialog1.FileName, Tboxes.GetTextOfList().Text);
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, SaveText().Text);
+                FileTItle = Path.GetFileNameWithoutExtension(FileName);
+                this.Text = FileTItle;
             }
         }
 
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        private TextBox SaveText()
         {
-            Date = dateTimePicker1.Value;
+            if (TitleBox.Text == "") return null;
+
+            TextBox SaveTextBox = new TextBox();
+            SaveTextBox.Multiline = true;
+
+            SaveTextBox.Text = TitleBox.Text + "\r\n";
+
+            SaveTextBox.Text += dateTimePicker1.Value + "\r\n";
+
+            SaveTextBox.Text += Weather + "\r\n";
+
+            SaveTextBox.Text += Tboxes.GetTextOfList().Text + "\r\n";
+
+            return SaveTextBox;
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            Weather = "맑음";
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            Weather = "비";
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            Weather = "눈";
         }
     }
 
@@ -105,24 +169,17 @@ namespace Diary
 
 namespace Suisei
 {
+
     public class TextBoxes
     {
 
-<<<<<<< Updated upstream
-        private List<TextBox> TextBoxList = new List<TextBox>(); // TextBox 저장하는 List
-        private int CurrentCursorLoc;
-=======
+        public List<TextBox> TextBoxList = new List<TextBox>(); // TextBox 저장하는 List
         private int CurrentCursorLoc = 0;
->>>>>>> Stashed changes
 
         private Panel panel;
-        private int BoxHeight;
 
-<<<<<<< Updated upstream
         private Font DefaultFont;
-=======
         int BoxHeight = 21; // 폰트 크기가 9일때 TextBox의 기본 높이
->>>>>>> Stashed changes
 
         public TextBoxes()
         {
@@ -138,6 +195,30 @@ namespace Suisei
             DefaultFont = panel.Font;
         }
 
+        public void SetTextBox(int TextBoxCount)
+        {
+            panel.Controls.Clear();
+
+            foreach (TextBox Tb in TextBoxList)
+            {
+                Tb.Dispose();
+            }
+
+            for (int i = 0; i < TextBoxCount; ++i)
+            {
+                TextBox Tb = new TextBox();
+                Tb.Name = (panel.Controls.Count).ToString();
+                Tb.Width = 800;
+                Tb.Location = new Point(0, TextBoxList.Count * BoxHeight);
+                Tb.KeyDown += new KeyEventHandler(Text_KeyDown);
+                Tb.Enter += new EventHandler(Text_Enter);
+                Tb.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+
+                TextBoxList.Add(Tb);
+                panel.Controls.Add(Tb);
+            }
+            TextBoxResize();
+        }
 
         // TextBoxCount만큼 TextBox를 만드는 메소드
         public void AddTextBox(int TextBoxCount)
@@ -146,23 +227,16 @@ namespace Suisei
             {
                 TextBox Tb = new TextBox();
                 Tb.Name = (panel.Controls.Count).ToString();
-                Tb.Text = (panel.Controls.Count).ToString();
                 Tb.Width = 800;
-<<<<<<< Updated upstream
                 Tb.Location = new Point(0, TextBoxList.Count * BoxHeight);
-=======
-                Tb.Location = new Point(0, panel.Controls.Count * BoxHeight);
->>>>>>> Stashed changes
-
                 Tb.KeyDown += new KeyEventHandler(Text_KeyDown);
                 Tb.Enter += new EventHandler(Text_Enter);
+                Tb.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
 
+                TextBoxList.Add(Tb);
                 panel.Controls.Add(Tb);
             }
-<<<<<<< Updated upstream
             TextBoxResize();
-=======
->>>>>>> Stashed changes
         }
 
         // 폰트를 받아와서 적용시키는 메소드
@@ -186,36 +260,13 @@ namespace Suisei
             Tb.Multiline = true;
             Tb.Text = "";
 
-            for (int i = 0; i < panel.Controls.Count; ++i)
+            for (int i = 0; i < TextBoxList.Count; ++i)
             {
-                Tb.Text += panel.Controls[i].Text + "\r\n";
+                Tb.Text += TextBoxList[i].Text + "\r\n";
             }
 
             return Tb;
         }
-
-<<<<<<< Updated upstream
-        public void ResetTextBoxes(int TextBoxCount)
-        {
-            panel.Font = DefaultFont;
-
-            for (int i = 0; i < TextBoxList.Count; ++i)
-            {
-                if (i >= TextBoxCount)
-                {
-                    panel.Controls.Remove(TextBoxList[i]);
-                    TextBoxList.RemoveAt(i);
-
-                    continue;
-                }
-
-                TextBoxList[i].Text = "";
-            }
-
-            TextBoxResize();
-
-        }
-
 
         // TextBox 높이 재설정
         private void TextBoxResize()
@@ -230,7 +281,6 @@ namespace Suisei
         }
 
 
-=======
         private void ReLoadTextBoxes()
         {
             Console.Clear();
@@ -241,7 +291,6 @@ namespace Suisei
             }
         }
 
->>>>>>> Stashed changes
         private void Text_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Down)

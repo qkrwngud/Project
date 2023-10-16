@@ -53,11 +53,13 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.MainTextPanel = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.MainTextPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -97,7 +99,6 @@
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(188, 21);
             this.dateTimePicker1.TabIndex = 0;
-            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // menuStrip1
             // 
@@ -173,7 +174,7 @@
             // 글꼴FToolStripMenuItem
             // 
             this.글꼴FToolStripMenuItem.Name = "글꼴FToolStripMenuItem";
-            this.글꼴FToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.글꼴FToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.글꼴FToolStripMenuItem.Text = "글꼴(&F)";
             this.글꼴FToolStripMenuItem.Click += new System.EventHandler(this.글꼴FToolStripMenuItem_Click);
             // 
@@ -206,6 +207,7 @@
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "눈";
             this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
             // 
             // radioButton2
             // 
@@ -218,6 +220,7 @@
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "비";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // radioButton1
             // 
@@ -232,6 +235,7 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "맑음";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // statusStrip1
             // 
@@ -265,10 +269,20 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MainTextPanel.AutoScroll = true;
+            this.MainTextPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.MainTextPanel.Controls.Add(this.textBox1);
             this.MainTextPanel.Location = new System.Drawing.Point(2, 15);
             this.MainTextPanel.Name = "MainTextPanel";
             this.MainTextPanel.Size = new System.Drawing.Size(827, 370);
             this.MainTextPanel.TabIndex = 0;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(596, 60);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(260, 340);
+            this.textBox1.TabIndex = 5;
             // 
             // Form1
             // 
@@ -294,6 +308,8 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
+            this.MainTextPanel.ResumeLayout(false);
+            this.MainTextPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -325,6 +341,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Panel MainTextPanel;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
