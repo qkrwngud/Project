@@ -22,6 +22,12 @@ namespace Diary
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (textBox1.Text == "")
+            {
+                MessageBox.Show("비어있음");
+                return;
+            }
+
             System.IO.File.WriteAllText(Password, textBox1.Text);
             Close();
         }
