@@ -55,67 +55,66 @@ namespace Diary
 
         private void 새로만들기_Click(object sender, EventArgs e)
         {
+            this.Text = "";
             TitleBox.Text = "";
 
-            Tboxes = new Suisei.TextBoxes();
-            Tboxes.SetPanel(MainTextPanel);
-            Tboxes.AddTextBox(ContentsBoxCount);
+            Tboxes.SetTextBox(ContentsBoxCount);
 
             radioButton1.Checked = true;
             dateTimePicker1.Value = DateTime.Now;
             MainTextPanel.Font = DefaultFontData;
+
+            FileName = "";
+            FileTItle = "";
         }
 
         private void 열기_Click(object sender, EventArgs e)
         {
-            openFileDialog1.ShowDialog();
             openFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
 
-            FileName = openFileDialog1.FileName;
-            FileTItle = Path.GetFileNameWithoutExtension(FileName);
-            this.Text = FileTItle;
-
-            TextBox TB= new TextBox();
-            TB.Text = System.IO.File.ReadAllText(openFileDialog1.FileName);
-
-
-            TitleBox.Text = TB.Lines[0];
-
-            DateTime NewDate = Convert.ToDateTime(TB.Lines[1]);
-            dateTimePicker1.Value = NewDate;
-
-            if (TB.Lines[2] == "맑음") radioButton1.Checked = true;
-            else if (TB.Lines[2] == "비") radioButton2.Checked = true;
-            else radioButton3.Checked = true;
-
-            int ContentsLengt = TB.Lines.Length - 3;
-            Tboxes.SetTextBox(ContentsLengt);
-
-            for (int i = 3; i  < ContentsLengt; i++)
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                Tboxes.TextBoxList[i].Text = TB.Lines[i];
+                FileName = openFileDialog1.FileName;
+                FileTItle = Path.GetFileNameWithoutExtension(FileName);
+                this.Text = FileTItle;
+
+                TextBox TB = new TextBox();
+                TB.Text = System.IO.File.ReadAllText(openFileDialog1.FileName);
+
+                TitleBox.Text = TB.Lines[0];
+
+                DateTime NewDate = Convert.ToDateTime(TB.Lines[1]);
+                dateTimePicker1.Value = NewDate;
+
+                if (TB.Lines[2] == "맑음") radioButton1.Checked = true;
+                else if (TB.Lines[2] == "비") radioButton2.Checked = true;
+                else radioButton3.Checked = true;
+
+                Tboxes.SetTextBox(TB.Lines.Length - 2);
+
+                for (int i = 0; i < TB.Lines.Length - 3; ++i)
+                {
+                    Tboxes.TextBoxList[i].Text = TB.Lines[i + 3];
+                }
             }
 
         }
 
         private void 저장_Click(object sender, EventArgs e)
         {
-            if (FileName == "")
+            saveFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
+            saveFileDialog1.FileName = FileTItle;
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                saveFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
-                saveFileDialog1.FileName = TitleBox.Text;
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, SaveText().Text);
 
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                if (FileName == "")
                 {
-                    System.IO.File.WriteAllText(saveFileDialog1.FileName, SaveText().Text);
                     FileName = saveFileDialog1.FileName;
                     FileTItle = Path.GetFileNameWithoutExtension(FileName);
                     this.Text = FileTItle;
                 }
-            }
-            else
-            {
-                System.IO.File.WriteAllText(saveFileDialog1.FileName, SaveText().Text);
+
             }
         }
 
@@ -126,6 +125,7 @@ namespace Diary
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 System.IO.File.WriteAllText(saveFileDialog1.FileName, SaveText().Text);
+                FileName = saveFileDialog1.FileName;
                 FileTItle = Path.GetFileNameWithoutExtension(FileName);
                 this.Text = FileTItle;
             }
@@ -203,6 +203,7 @@ namespace Suisei
             {
                 Tb.Dispose();
             }
+            TextBoxList.Clear();
 
             for (int i = 0; i < TextBoxCount; ++i)
             {
