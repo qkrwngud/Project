@@ -14,14 +14,14 @@ namespace Diary
 
         Suisei.TextBoxes Tboxes = new Suisei.TextBoxes();
 
-        string FileTItle = "";
-        string FileName = "";
+        string FileTItle = ""; // 저장 제목
+        string FileName = ""; // 파일 경로
 
-        int ContentsBoxCount = 10;
+        int ContentsBoxCount = 10; // 텍스트 박스 갯수
 
-        Font DefaultFontData;
+        Font DefaultFontData; // 기본 폰트
 
-        string Weather = "맑음";
+        string Weather = "맑음"; // 날씨
 
 
         public Form1()
@@ -46,23 +46,24 @@ namespace Diary
 
         }
 
+        // 글꼴 설정
         private void 글꼴FToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fontDialog1.ShowDialog(this);
-            MainTextPanel.Location = new Point(2, 15);
-            Tboxes.SetFont(fontDialog1.Font);
+            MainTextPanel.Location = new Point(2, 15); // panel의 위치 조정
+            Tboxes.SetFont(fontDialog1.Font); // 내용의 폰트 설정
         }
 
         private void 새로만들기_Click(object sender, EventArgs e)
         {
             this.Text = "";
-            TitleBox.Text = "";
+            TitleBox.Text = ""; // 제목 초기화
 
-            Tboxes.SetTextBox(ContentsBoxCount);
+            Tboxes.SetFont(DefaultFontData); // 폰트 초기화
+            Tboxes.SetTextBox(ContentsBoxCount); // 기존 박스 삭제 및 박스 생성
 
-            radioButton1.Checked = true;
-            dateTimePicker1.Value = DateTime.Now;
-            MainTextPanel.Font = DefaultFontData;
+            radioButton1.Checked = true; // 맑음으로 설정
+            dateTimePicker1.Value = DateTime.Now; // 날짜를 현재로 맞춤
 
             FileName = "";
             FileTItle = "";
@@ -70,31 +71,35 @@ namespace Diary
 
         private void 열기_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
+            openFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*"; // 필터
 
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (openFileDialog1.ShowDialog() == DialogResult.OK) // 
             {
-                FileName = openFileDialog1.FileName;
-                FileTItle = Path.GetFileNameWithoutExtension(FileName);
+                FileName = openFileDialog1.FileName; // 경로 저장
+                FileTItle = Path.GetFileNameWithoutExtension(FileName); // 이름 저장
                 this.Text = FileTItle;
 
                 TextBox TB = new TextBox();
-                TB.Text = System.IO.File.ReadAllText(openFileDialog1.FileName);
+                TB.Text = System.IO.File.ReadAllText(openFileDialog1.FileName); // 파일에 있는 내용을 TB에 저장
 
-                TitleBox.Text = TB.Lines[0];
+                TitleBox.Text = TB.Lines[0]; // 0번째는 제목
 
+                // 1번째는 날짜
                 DateTime NewDate = Convert.ToDateTime(TB.Lines[1]);
                 dateTimePicker1.Value = NewDate;
 
+                // 2번재는 날씨
                 if (TB.Lines[2] == "맑음") radioButton1.Checked = true;
                 else if (TB.Lines[2] == "비") radioButton2.Checked = true;
                 else radioButton3.Checked = true;
 
+                // 박스 재생성
                 Tboxes.SetTextBox(TB.Lines.Length - 2);
 
-                for (int i = 0; i < TB.Lines.Length - 3; ++i)
+                // 3번째 줄부터 내용에 채움
+                for (int i = 0; i < TB.Lines.Length - 3; ++i) // 반복문 0부터 TB.Lines.Length -3 미만 까지 돌림
                 {
-                    Tboxes.TextBoxList[i].Text = TB.Lines[i + 3];
+                    Tboxes.TextBoxList[i].Text = TB.Lines[i + 3]; // Tboxes의 박스 마다 내용을 채움
                 }
             }
 
@@ -102,11 +107,12 @@ namespace Diary
 
         private void 저장_Click(object sender, EventArgs e)
         {
-            saveFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
-            saveFileDialog1.FileName = FileTItle;
+            saveFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*"; // 필터
+            saveFileDialog1.FileName = FileTItle; // 처음 저장 이름을 FileTitle로 함
+
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                System.IO.File.WriteAllText(saveFileDialog1.FileName, SaveText().Text);
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, SaveText().Text); // 
 
                 if (FileName == "")
                 {
