@@ -23,3 +23,4 @@ C:\Users\juhyu\Desktop\Project\Diary\Diary\obj\Debug\Diary.TitleForm.resources
 C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.TitleForm.resources
 C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.PasswordForm.resources
 C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.PasswordCheckForm.resources
+C:\Users\juhyu\Desktop\Project\Diary\Diary\obj\Debug\Diary.PasswordForm.resources

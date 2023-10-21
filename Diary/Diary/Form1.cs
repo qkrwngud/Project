@@ -17,6 +17,8 @@ namespace Diary
         string FileTItle = ""; // 저장 제목
         string FileName = ""; // 파일 경로
 
+        string DiaryType = "일반";
+
         int ContentsBoxCount = 10; // 텍스트 박스 갯수
 
         Font DefaultFontData; // 기본 폰트
@@ -24,17 +26,18 @@ namespace Diary
         string Weather = "맑음"; // 날씨
 
 
-        public Form1()
+        public Form1(string NewDiaryType)
         {
             InitializeComponent();
 
             this.Text = "테스트";
             Tboxes.SetPanel(MainTextPanel);
-            Tboxes.SetTextBox(ContentsBoxCount);
+            Tboxes.InitializeBox(ContentsBoxCount);
             radioButton1.Checked = true;
 
             DefaultFontData = MainTextPanel.Font;
 
+            DiaryType = NewDiaryType;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -60,7 +63,7 @@ namespace Diary
             TitleBox.Text = ""; // 제목 초기화
 
             Tboxes.SetFont(DefaultFontData); // 폰트 초기화
-            Tboxes.SetTextBox(ContentsBoxCount); // 기존 박스 삭제 및 박스 생성
+            Tboxes.InitializeBox(ContentsBoxCount); // 기존 박스 삭제 및 박스 생성
 
             radioButton1.Checked = true; // 맑음으로 설정
             dateTimePicker1.Value = DateTime.Now; // 날짜를 현재로 맞춤
@@ -82,24 +85,33 @@ namespace Diary
                 TextBox TB = new TextBox();
                 TB.Text = System.IO.File.ReadAllText(openFileDialog1.FileName); // 파일에 있는 내용을 TB에 저장
 
-                TitleBox.Text = TB.Lines[0]; // 0번째는 제목
+                // 할거 파일을 열때 비밀일기라면 PasswordForm을 비밀번호확인으로 열어서 
+                // 확인을 눌렸을때 비밀번호가 동일하면 파일을 연다
+
+                if (TB.Lines[0] == "비밀")
+                {
+                    PasswordForm passwordForm = new PasswordForm("비밀번호확인");
+                    passwordForm.ShowDialog();
+                }
+
+                TitleBox.Text = TB.Lines[1]; // 0번째는 제목
 
                 // 1번째는 날짜
-                DateTime NewDate = Convert.ToDateTime(TB.Lines[1]);
+                DateTime NewDate = Convert.ToDateTime(TB.Lines[2]);
                 dateTimePicker1.Value = NewDate;
 
                 // 2번재는 날씨
-                if (TB.Lines[2] == "맑음") radioButton1.Checked = true;
-                else if (TB.Lines[2] == "비") radioButton2.Checked = true;
+                if (TB.Lines[3] == "맑음") radioButton1.Checked = true;
+                else if (TB.Lines[3] == "비") radioButton2.Checked = true;
                 else radioButton3.Checked = true;
 
                 // 박스 재생성
-                Tboxes.SetTextBox(TB.Lines.Length - 2);
+                Tboxes.InitializeBox(TB.Lines.Length - 3);
 
                 // 3번째 줄부터 내용에 채움
-                for (int i = 0; i < TB.Lines.Length - 3; ++i) // 반복문 0부터 TB.Lines.Length -3 미만 까지 돌림
+                for (int i = 0; i < TB.Lines.Length - 4; ++i) // 반복문 0부터 TB.Lines.Length -3 미만 까지 돌림
                 {
-                    Tboxes.TextBoxList[i].Text = TB.Lines[i + 3]; // Tboxes의 박스 마다 내용을 채움
+                    Tboxes.TextBoxList[i].Text = TB.Lines[i + 4]; // Tboxes의 박스 마다 내용을 채움
                 }
             }
 
@@ -112,7 +124,7 @@ namespace Diary
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                System.IO.File.WriteAllText(saveFileDialog1.FileName, SaveText().Text); // 
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, GetTextforSave()); // 
 
                 if (FileName == "")
                 {
@@ -130,29 +142,31 @@ namespace Diary
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                System.IO.File.WriteAllText(saveFileDialog1.FileName, SaveText().Text);
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, GetTextforSave());
                 FileName = saveFileDialog1.FileName;
                 FileTItle = Path.GetFileNameWithoutExtension(FileName);
                 this.Text = FileTItle;
             }
         }
 
-        private TextBox SaveText()
+        private string GetTextforSave()
         {
             if (TitleBox.Text == "") return null;
 
             TextBox SaveTextBox = new TextBox();
             SaveTextBox.Multiline = true;
 
-            SaveTextBox.Text = TitleBox.Text + "\r\n";
+            SaveTextBox.Text = DiaryType + "\r\n";
+
+            SaveTextBox.Text += TitleBox.Text + "\r\n";
 
             SaveTextBox.Text += dateTimePicker1.Value + "\r\n";
 
             SaveTextBox.Text += Weather + "\r\n";
 
-            SaveTextBox.Text += Tboxes.GetTextOfList().Text + "\r\n";
+            SaveTextBox.Text += Tboxes.GetContents() + "\r\n";
 
-            return SaveTextBox;
+            return SaveTextBox.Text;
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -169,6 +183,7 @@ namespace Diary
         {
             Weather = "눈";
         }
+
     }
 
 }
@@ -201,7 +216,7 @@ namespace Suisei
             DefaultFont = panel.Font;
         }
 
-        public void SetTextBox(int TextBoxCount)
+        public void InitializeBox(int TextBoxCount)
         {
             panel.Controls.Clear();
 
@@ -261,7 +276,7 @@ namespace Suisei
 
         // 내용을 파일에 저장할때 사용하는 메소드
         // TextBoxList의 원소인 TextBox들의 Text를 한개의 TextBox에 옮겨서 반환
-        public TextBox GetTextOfList()
+        public string GetContents()
         {
             TextBox Tb = new TextBox();
             Tb.Multiline = true;
@@ -272,7 +287,7 @@ namespace Suisei
                 Tb.Text += TextBoxList[i].Text + "\r\n";
             }
 
-            return Tb;
+            return Tb.Text;
         }
 
         // TextBox 높이 재설정
@@ -288,7 +303,7 @@ namespace Suisei
         }
 
 
-        private void ReLoadTextBoxes()
+        private void ReLoadBoxSize()
         {
             Console.Clear();
             for (int i = 0; i < panel.Controls.Count; ++i)

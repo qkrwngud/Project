@@ -194,7 +194,7 @@
             this.groupBox3.Controls.Add(this.radioButton1);
             this.groupBox3.Location = new System.Drawing.Point(536, 28);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(308, 113);
+            this.groupBox3.Size = new System.Drawing.Size(308, 96);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "날씨";
@@ -288,9 +288,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.MainTextPanel);
-            this.groupBox4.Location = new System.Drawing.Point(13, 147);
+            this.groupBox4.Location = new System.Drawing.Point(13, 130);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(831, 329);
+            this.groupBox4.Size = new System.Drawing.Size(831, 346);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "내용";
@@ -304,7 +304,7 @@
             this.MainTextPanel.BackColor = System.Drawing.SystemColors.Control;
             this.MainTextPanel.Location = new System.Drawing.Point(2, 15);
             this.MainTextPanel.Name = "MainTextPanel";
-            this.MainTextPanel.Size = new System.Drawing.Size(827, 309);
+            this.MainTextPanel.Size = new System.Drawing.Size(827, 326);
             this.MainTextPanel.TabIndex = 0;
             // 
             // Form1

@@ -17,8 +17,6 @@ namespace Diary
             InitializeComponent();
         }
 
-        PasswordForm passwordForm = new PasswordForm();
-
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -26,26 +24,20 @@ namespace Diary
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form1 form = new Form1();
+            Form1 form = new Form1("일반");
             form.ShowDialog();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            PasswordForm passwordForm = new PasswordForm("비밀번호설정");
             passwordForm.ShowDialog();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (passwordForm.Password == "")
-            {
-                MessageBox.Show("비밀번호 설정 필요");
-                return;
-            }
-            
-            PasswordCheckForm passwordCheckForm = new PasswordCheckForm(passwordForm.Password);
-            passwordCheckForm.ShowDialog();
-
+            Form1 form = new Form1("비밀");
+            form.ShowDialog();
         }
     }
 }
