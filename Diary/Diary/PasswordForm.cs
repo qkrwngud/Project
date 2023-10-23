@@ -15,12 +15,30 @@ namespace Diary
 
         string FormType = "비밀번호설정";
 
-        public PasswordForm(string NewFormType)
+        private delegate void CloseDelegate();
+        CloseDelegate closeDelegate;
+
+        public PasswordForm(TitleForm NewTitleForm, string NewFormType)
         {
             InitializeComponent();
 
             FormType = NewFormType;
 
+            closeDelegate = new CloseDelegate(NewTitleForm.OpenDiary);
+
+        }
+        public PasswordForm(string NewFormType)
+        {
+            InitializeComponent();
+
+            FormType = NewFormType;
+        }
+
+        string DiaryPath = "";
+
+        public void SetDiaryPath(string NewDiaryPath)
+        {
+            DiaryPath = NewDiaryPath;
         }
 
         public string PasswordFilePath = Application.StartupPath + @"\Password.txt";
@@ -44,9 +62,7 @@ namespace Diary
 
                 if (textBox1.Text == Password)
                 {
-                    Form1 form = new Form1("비밀");
-                    form.ShowDialog();
-                    this.Close();
+                    closeDelegate();
                 }
             }
         }

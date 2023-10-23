@@ -38,6 +38,7 @@ namespace Diary
             DefaultFontData = MainTextPanel.Font;
 
             DiaryType = NewDiaryType;
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -72,7 +73,7 @@ namespace Diary
             FileTItle = "";
         }
 
-        private void 열기_Click(object sender, EventArgs e)
+        public void 열기_Click(object sender, EventArgs e)
         {
             openFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*"; // 필터
 
@@ -82,37 +83,12 @@ namespace Diary
                 FileTItle = Path.GetFileNameWithoutExtension(FileName); // 이름 저장
                 this.Text = FileTItle;
 
-                TextBox TB = new TextBox();
-                TB.Text = System.IO.File.ReadAllText(openFileDialog1.FileName); // 파일에 있는 내용을 TB에 저장
+                radioButton1.Checked = false;
+                radioButton2.Checked = false;
+                radioButton3.Checked = false;
 
-                // 할거 파일을 열때 비밀일기라면 PasswordForm을 비밀번호확인으로 열어서 
-                // 확인을 눌렸을때 비밀번호가 동일하면 파일을 연다
+                OpenFile(FileName);
 
-                if (TB.Lines[0] == "비밀")
-                {
-                    PasswordForm passwordForm = new PasswordForm("비밀번호확인");
-                    passwordForm.ShowDialog();
-                }
-
-                TitleBox.Text = TB.Lines[1]; // 0번째는 제목
-
-                // 1번째는 날짜
-                DateTime NewDate = Convert.ToDateTime(TB.Lines[2]);
-                dateTimePicker1.Value = NewDate;
-
-                // 2번재는 날씨
-                if (TB.Lines[3] == "맑음") radioButton1.Checked = true;
-                else if (TB.Lines[3] == "비") radioButton2.Checked = true;
-                else radioButton3.Checked = true;
-
-                // 박스 재생성
-                Tboxes.InitializeBox(TB.Lines.Length - 3);
-
-                // 3번째 줄부터 내용에 채움
-                for (int i = 0; i < TB.Lines.Length - 4; ++i) // 반복문 0부터 TB.Lines.Length -3 미만 까지 돌림
-                {
-                    Tboxes.TextBoxList[i].Text = TB.Lines[i + 4]; // Tboxes의 박스 마다 내용을 채움
-                }
             }
 
         }
@@ -182,6 +158,52 @@ namespace Diary
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
             Weather = "눈";
+        }
+
+        public void OpenFile(string filename)
+        {
+
+            FileName = filename; // 경로 저장
+            FileTItle = Path.GetFileNameWithoutExtension(filename); // 이름 저장
+            this.Text = FileTItle;
+
+            TextBox TB = new TextBox();
+            TB.Text = System.IO.File.ReadAllText(filename);
+
+
+            // 할거 파일을 열때 비밀일기라면 PasswordForm을 비밀번호확인으로 열어서 
+            // 확인을 눌렸을때 비밀번호가 동일하면 파일을 연다
+
+
+            // 일기 종류 확인
+            if (TB.Lines[0] == "비밀")
+            {
+                PasswordForm passwordForm = new PasswordForm("비밀번호확인");
+                passwordForm.SetDiaryPath(FileName);
+                passwordForm.ShowDialog();
+                return;
+            }
+
+            TitleBox.Text = TB.Lines[1]; // 0번째는 제목
+
+            // 1번째는 날짜
+            DateTime NewDate = Convert.ToDateTime(TB.Lines[2]);
+            dateTimePicker1.Value = NewDate;
+
+            // 2번재는 날씨
+            if (TB.Lines[3] == "맑음") radioButton1.Checked = true;
+            else if (TB.Lines[3] == "비") radioButton2.Checked = true;
+            else radioButton3.Checked = true;
+
+            // 박스 재생성
+            Tboxes.InitializeBox(TB.Lines.Length - 3);
+
+            // 3번째 줄부터 내용에 채움
+            for (int i = 0; i < TB.Lines.Length - 4; ++i) // 반복문 0부터 TB.Lines.Length -3 미만 까지 돌림
+            {
+                Tboxes.TextBoxList[i].Text = TB.Lines[i + 4]; // Tboxes의 박스 마다 내용을 채움
+            }
+
         }
 
     }
