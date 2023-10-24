@@ -17,8 +17,6 @@ namespace Diary
         string FileTItle = ""; // 저장 제목
         string FileName = ""; // 파일 경로
 
-        string DiaryType = "일반";
-
         int ContentsBoxCount = 10; // 텍스트 박스 갯수
 
         Font DefaultFontData; // 기본 폰트
@@ -26,28 +24,26 @@ namespace Diary
         string Weather = "맑음"; // 날씨
 
 
-        public Form1(string NewDiaryType)
+        public Form1()
         {
             InitializeComponent();
 
             this.Text = "테스트";
             Tboxes.SetPanel(MainTextPanel);
             Tboxes.InitializeBox(ContentsBoxCount);
-            radioButton1.Checked = true;
 
             DefaultFontData = MainTextPanel.Font;
-
-            DiaryType = NewDiaryType;
 
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
         }
 
         private void 끝내기_Click(object sender, EventArgs e)
         {
-
+            Close();
         }
 
         // 글꼴 설정
@@ -66,7 +62,6 @@ namespace Diary
             Tboxes.SetFont(DefaultFontData); // 폰트 초기화
             Tboxes.InitializeBox(ContentsBoxCount); // 기존 박스 삭제 및 박스 생성
 
-            radioButton1.Checked = true; // 맑음으로 설정
             dateTimePicker1.Value = DateTime.Now; // 날짜를 현재로 맞춤
 
             FileName = "";
@@ -83,12 +78,7 @@ namespace Diary
                 FileTItle = Path.GetFileNameWithoutExtension(FileName); // 이름 저장
                 this.Text = FileTItle;
 
-                radioButton1.Checked = false;
-                radioButton2.Checked = false;
-                radioButton3.Checked = false;
-
                 OpenFile(FileName);
-
             }
 
         }
@@ -132,9 +122,7 @@ namespace Diary
             TextBox SaveTextBox = new TextBox();
             SaveTextBox.Multiline = true;
 
-            SaveTextBox.Text = DiaryType + "\r\n";
-
-            SaveTextBox.Text += TitleBox.Text + "\r\n";
+            SaveTextBox.Text = TitleBox.Text + "\r\n";
 
             SaveTextBox.Text += dateTimePicker1.Value + "\r\n";
 
@@ -174,36 +162,26 @@ namespace Diary
             // 할거 파일을 열때 비밀일기라면 PasswordForm을 비밀번호확인으로 열어서 
             // 확인을 눌렸을때 비밀번호가 동일하면 파일을 연다
 
-
-            // 일기 종류 확인
-            if (TB.Lines[0] == "비밀")
-            {
-                PasswordForm passwordForm = new PasswordForm("비밀번호확인");
-                passwordForm.SetDiaryPath(FileName);
-                passwordForm.ShowDialog();
-                return;
-            }
-
-            TitleBox.Text = TB.Lines[1]; // 0번째는 제목
+            TitleBox.Text = TB.Lines[0]; // 0번째는 제목
 
             // 1번째는 날짜
-            DateTime NewDate = Convert.ToDateTime(TB.Lines[2]);
+            DateTime NewDate = Convert.ToDateTime(TB.Lines[1]);
             dateTimePicker1.Value = NewDate;
 
             // 2번재는 날씨
-            if (TB.Lines[3] == "맑음") radioButton1.Checked = true;
-            else if (TB.Lines[3] == "비") radioButton2.Checked = true;
+            if (TB.Lines[2] == "맑음") radioButton1.Checked = true;
+            else if (TB.Lines[2] == "비") radioButton2.Checked = true;
             else radioButton3.Checked = true;
 
             // 박스 재생성
-            Tboxes.InitializeBox(TB.Lines.Length - 3);
+            Tboxes.InitializeBox(TB.Lines.Length - 2);
 
             // 3번째 줄부터 내용에 채움
-            for (int i = 0; i < TB.Lines.Length - 4; ++i) // 반복문 0부터 TB.Lines.Length -3 미만 까지 돌림
+            for (int i = 0; i < TB.Lines.Length - 3; ++i) // 반복문 0부터 TB.Lines.Length -3 미만 까지 돌림
             {
-                Tboxes.TextBoxList[i].Text = TB.Lines[i + 4]; // Tboxes의 박스 마다 내용을 채움
+                Tboxes.TextBoxList[i].Text = TB.Lines[i + 3]; // Tboxes의 박스 마다 내용을 채움
             }
-
+            Tboxes.ReLoadBoxSize();
         }
 
     }
@@ -325,7 +303,7 @@ namespace Suisei
         }
 
 
-        private void ReLoadBoxSize()
+        public void ReLoadBoxSize()
         {
             Console.Clear();
             for (int i = 0; i < panel.Controls.Count; ++i)

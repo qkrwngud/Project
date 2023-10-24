@@ -259,9 +259,8 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.radioButton1.AutoCheck = false;
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
             this.radioButton1.Image = global::Diary.Properties.Resources.sunny;
-            this.radioButton1.Location = new System.Drawing.Point(6, 21);
+            this.radioButton1.Location = new System.Drawing.Point(6, 20);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(61, 49);
             this.radioButton1.TabIndex = 0;
