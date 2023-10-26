@@ -30,14 +30,9 @@ namespace Diary
 
             this.Text = "테스트";
             Tboxes.SetPanel(MainTextPanel);
-            Tboxes.InitializeBox(ContentsBoxCount);
+            Tboxes.MakeBoxes(ContentsBoxCount);
 
             DefaultFontData = MainTextPanel.Font;
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
 
         }
 
@@ -54,13 +49,13 @@ namespace Diary
             Tboxes.SetFont(fontDialog1.Font); // 내용의 폰트 설정
         }
 
-        private void 새로만들기_Click(object sender, EventArgs e)
+        private void 새로만들기_Click(object sender, EventArgs e) // 사용자가 설정한 모든 값을 초기화
         {
             this.Text = "";
             TitleBox.Text = ""; // 제목 초기화
 
             Tboxes.SetFont(DefaultFontData); // 폰트 초기화
-            Tboxes.InitializeBox(ContentsBoxCount); // 기존 박스 삭제 및 박스 생성
+            Tboxes.MakeBoxes(ContentsBoxCount); // 기존 박스 삭제 및 박스 생성
 
             dateTimePicker1.Value = DateTime.Now; // 날짜를 현재로 맞춤
 
@@ -90,8 +85,9 @@ namespace Diary
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                System.IO.File.WriteAllText(saveFileDialog1.FileName, GetTextforSave()); // 
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, GetTextforSave()); // 파일 저장
 
+                // 파일 이름이 비었으면 파일 이름, 경로, 제목 설정
                 if (FileName == "")
                 {
                     FileName = saveFileDialog1.FileName;
@@ -106,7 +102,7 @@ namespace Diary
         {
             saveFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
 
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK) // saveFileDialog를 열었을때 저장을 누르면 DialogResult.Ok가 나온다
             {
                 System.IO.File.WriteAllText(saveFileDialog1.FileName, GetTextforSave());
                 FileName = saveFileDialog1.FileName;
@@ -115,7 +111,7 @@ namespace Diary
             }
         }
 
-        private string GetTextforSave()
+        private string GetTextforSave() // 텍스트 박스의 값들을 저장을 위한 문자열로 묶음
         {
             if (TitleBox.Text == "") return null;
 
@@ -133,22 +129,27 @@ namespace Diary
             return SaveTextBox.Text;
         }
 
+        
+
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             Weather = "맑음";
+            radioButton1.Checked = true;
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             Weather = "비";
+            radioButton2.Checked = true;
         }
 
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
             Weather = "눈";
+            radioButton3.Checked = true;
         }
 
-        public void OpenFile(string filename)
+        public void OpenFile(string filename) // 파일 경로를 받아 파일 경로의 데이터를 받아옴
         {
 
             FileName = filename; // 경로 저장
@@ -174,16 +175,16 @@ namespace Diary
             else radioButton3.Checked = true;
 
             // 박스 재생성
-            Tboxes.InitializeBox(TB.Lines.Length - 2);
+            Tboxes.MakeBoxes(TB.Lines.Length - 2);
 
             // 3번째 줄부터 내용에 채움
             for (int i = 0; i < TB.Lines.Length - 3; ++i) // 반복문 0부터 TB.Lines.Length -3 미만 까지 돌림
             {
                 Tboxes.TextBoxList[i].Text = TB.Lines[i + 3]; // Tboxes의 박스 마다 내용을 채움
             }
-            Tboxes.ReLoadBoxSize();
+            Tboxes.TextBoxResize();
         }
-
+            
     }
 
 }
@@ -195,14 +196,14 @@ namespace Suisei
     {
 
         public List<TextBox> TextBoxList = new List<TextBox>(); // TextBox 저장하는 List
-        private int CurrentCursorLoc = 0;
+        private int CurrentCursorLoc = 0; // 커서 위치
 
-        private Panel panel;
+        private Panel panel; // Form1에서 받아온 Panel을 넣음
 
-        private Font DefaultFont;
+        private Font DefaultFont; // 기본 폰트
         int BoxHeight = 21; // 폰트 크기가 9일때 TextBox의 기본 높이
 
-        public TextBoxes()
+        public TextBoxes() // 생성자
         {
             CurrentCursorLoc= 0;
             BoxHeight = 21;
@@ -210,41 +211,47 @@ namespace Suisei
             DefaultFont = null;
         }
 
-        public void SetPanel(Panel MainTextPanel)
+        public void SetPanel(Panel MainTextPanel) // 판넬 세팅
         {
             panel = MainTextPanel;
             DefaultFont = panel.Font;
         }
 
-        public void InitializeBox(int TextBoxCount)
+        public void MakeBoxes(int TextBoxCount) // TextBoxCount만큼 박스 생성
         {
             panel.Controls.Clear();
 
-            foreach (TextBox Tb in TextBoxList)
+            foreach (TextBox Tb in TextBoxList) // TextBoxList의 값 소멸
             {
                 Tb.Dispose();
             }
-            TextBoxList.Clear();
 
+            TextBoxList.Clear(); // 텍스트 박스 리스트 초기화
+
+            // 박스 생성
             for (int i = 0; i < TextBoxCount; ++i)
             {
                 TextBox Tb = new TextBox();
-                Tb.Name = (panel.Controls.Count).ToString();
-                Tb.Width = 800;
-                Tb.Location = new Point(0, TextBoxList.Count * BoxHeight);
+                Tb.Name = (panel.Controls.Count).ToString(); // 이름 설정
+                Tb.Width = 800; // 너비
+                Tb.Location = new Point(0, TextBoxList.Count * BoxHeight); // 위치
+
+                // 키 이벤트
                 Tb.KeyDown += new KeyEventHandler(Text_KeyDown);
-                Tb.Enter += new EventHandler(Text_Enter);
+
                 Tb.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
 
+                // TextBoxList와 panel에 추가
                 TextBoxList.Add(Tb);
                 panel.Controls.Add(Tb);
+
             }
-            TextBoxResize();
+            TextBoxResize(); // 박스 크기 재설정
         }
 
-        // TextBoxCount만큼 TextBox를 만드는 메소드
-        public void AddTextBox(int TextBoxCount)
+        public void AddTextBox(int TextBoxCount) // TextBoxCount만큼 박스 추가
         {
+            // MakeBoxes와 동일
             for (int i = 0; i < TextBoxCount; ++i)
             {
                 TextBox Tb = new TextBox();
@@ -252,7 +259,6 @@ namespace Suisei
                 Tb.Width = 800;
                 Tb.Location = new Point(0, TextBoxList.Count * BoxHeight);
                 Tb.KeyDown += new KeyEventHandler(Text_KeyDown);
-                Tb.Enter += new EventHandler(Text_Enter);
                 Tb.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
 
                 TextBoxList.Add(Tb);
@@ -267,8 +273,6 @@ namespace Suisei
             panel.Font = Font;
 
             BoxHeight = panel.Controls[0].Size.Height;
-
-
 
             TextBoxResize();
 
@@ -290,35 +294,27 @@ namespace Suisei
             return Tb.Text;
         }
 
-        // TextBox 높이 재설정
-        private void TextBoxResize()
+        // TextBoxList의 TextBox의 위치 재설정
+        public void TextBoxResize()
         {
+            int ScrollValue = panel.VerticalScroll.Value; // 현재 스크롤바 위치
 
-            int ScrollValue = panel.VerticalScroll.Value;
-
+            // TextBoxList의 박스 크기를 재설정
             for (int i = 1; i < TextBoxList.Count; ++i)
             {
                 TextBoxList[i].Location = new Point(0, i * TextBoxList[0].Height - ScrollValue);
             }
         }
 
-
-        public void ReLoadBoxSize()
-        {
-            Console.Clear();
-            for (int i = 0; i < panel.Controls.Count; ++i)
-            {
-                panel.Controls[i].Location = new System.Drawing.Point(0, i * BoxHeight);
-                Console.WriteLine(panel.Controls[i].Name);
-            }
-        }
-
         private void Text_KeyDown(object sender, KeyEventArgs e)
         {
+            // Enter, Down(↓)키를 눌렀을때 커서가 아래로 내려감
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Down)
             {
+                // 현재 커서 위치와 panel의 요소갯수 비교
                 if (CurrentCursorLoc >= panel.Controls.Count - 1)
                 {
+                    // 현재 커서 위치와 panel의 요소갯수가 같으면 박스를 5개 추가
                     if (e.KeyCode == Keys.Enter)
                     {
                         AddTextBox(5);
@@ -331,13 +327,16 @@ namespace Suisei
                 ++CurrentCursorLoc;
                 panel.Controls[CurrentCursorLoc].Focus();
             }
+            // Backspace, Up(↑)키를 눌렀을때 커서가 위로 올라감
             else if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Up)
             {
+                // 커서 위치가 0이하면 커서를 안올림
                 if (CurrentCursorLoc <= 0)
                 {
                     return;
                 }
 
+                // 현재 커서가 있는 위치의 TextBox가 비어있거나 Up(↑)키를 누르면 커서를 위로 올림
                 if (TextBoxList[CurrentCursorLoc].Text == "" || e.KeyCode == Keys.Up)
                 {
                     --CurrentCursorLoc;
@@ -345,12 +344,6 @@ namespace Suisei
                 }
             }
             
-        }
-
-        private void Text_Enter(object sender, EventArgs e)
-        {
-            TextBox Tb = (TextBox)sender;
-            CurrentCursorLoc = Int32.Parse(Tb.Name);
         }
     }
 }
