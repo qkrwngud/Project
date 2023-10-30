@@ -46,12 +46,9 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -186,12 +183,9 @@
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.label2);
-            this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Controls.Add(this.radioButton1);
             this.groupBox3.Controls.Add(this.radioButton3);
             this.groupBox3.Controls.Add(this.radioButton2);
-            this.groupBox3.Controls.Add(this.radioButton1);
             this.groupBox3.Location = new System.Drawing.Point(536, 28);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(308, 96);
@@ -199,32 +193,16 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "날씨";
             // 
-            // label3
+            // radioButton1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(249, 76);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(17, 12);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "눈";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(146, 76);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(17, 12);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "비";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(26, 73);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 12);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "맑음";
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Image = global::Diary.Properties.Resources.sunny;
+            this.radioButton1.Location = new System.Drawing.Point(6, 24);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(61, 49);
+            this.radioButton1.TabIndex = 3;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // radioButton3
             // 
@@ -232,41 +210,26 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.radioButton3.AutoSize = true;
             this.radioButton3.Image = global::Diary.Properties.Resources.snowman;
-            this.radioButton3.Location = new System.Drawing.Point(222, 18);
+            this.radioButton3.Location = new System.Drawing.Point(219, 24);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(69, 55);
             this.radioButton3.TabIndex = 2;
             this.radioButton3.TabStop = true;
             this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // radioButton2
             // 
             this.radioButton2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.radioButton2.AutoSize = true;
             this.radioButton2.Image = global::Diary.Properties.Resources.rainy;
-            this.radioButton2.Location = new System.Drawing.Point(115, 17);
+            this.radioButton2.Location = new System.Drawing.Point(113, 24);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(66, 56);
             this.radioButton2.TabIndex = 1;
             this.radioButton2.TabStop = true;
             this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.radioButton1.AutoCheck = false;
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Image = global::Diary.Properties.Resources.sunny;
-            this.radioButton1.Location = new System.Drawing.Point(6, 20);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(61, 49);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // statusStrip1
             // 
@@ -347,7 +310,6 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.ToolStripMenuItem 파일ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 새로만들기;
         private System.Windows.Forms.ToolStripMenuItem 열기;
@@ -360,9 +322,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Panel MainTextPanel;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.RadioButton radioButton1;
     }
 }
 

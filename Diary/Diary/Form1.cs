@@ -17,7 +17,7 @@ namespace Diary
         string FileTItle = ""; // 저장 제목
         string FileName = ""; // 파일 경로
 
-        int ContentsBoxCount = 10; // 텍스트 박스 갯수
+        int ContentsBoxCount = 5; // 텍스트 박스 갯수
 
         Font DefaultFontData; // 기본 폰트
 
@@ -34,6 +34,7 @@ namespace Diary
 
             DefaultFontData = MainTextPanel.Font;
 
+            radioButton1.Checked = true;
         }
 
         private void 끝내기_Click(object sender, EventArgs e)
@@ -61,6 +62,11 @@ namespace Diary
 
             FileName = "";
             FileTItle = "";
+
+            radioButton1.Checked= false;
+            radioButton2.Checked= false;
+            radioButton3.Checked= false;
+
         }
 
         public void 열기_Click(object sender, EventArgs e)
@@ -80,6 +86,12 @@ namespace Diary
 
         private void 저장_Click(object sender, EventArgs e)
         {
+            if (TitleBox.Text == "")
+            {
+                MessageBox.Show("제목이 비어있음");
+                return;
+            }
+
             saveFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*"; // 필터
             saveFileDialog1.FileName = FileTItle; // 처음 저장 이름을 FileTitle로 함
 
@@ -100,6 +112,12 @@ namespace Diary
 
         private void 다른이름으로저장_Click(object sender, EventArgs e)
         {
+            if (TitleBox.Text == "")
+            {
+                MessageBox.Show("제목이 비어있음");
+                return;
+            }
+
             saveFileDialog1.Filter = "텍스트 문서(*.txt)|*.txt|모든파일|*.*";
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK) // saveFileDialog를 열었을때 저장을 누르면 DialogResult.Ok가 나온다
@@ -113,40 +131,38 @@ namespace Diary
 
         private string GetTextforSave() // 텍스트 박스의 값들을 저장을 위한 문자열로 묶음
         {
-            if (TitleBox.Text == "") return null;
+            if (TitleBox.Text == "" || Weather == "") return "";
 
             TextBox SaveTextBox = new TextBox();
             SaveTextBox.Multiline = true;
 
-            SaveTextBox.Text = TitleBox.Text + "\r\n";
+            SaveTextBox.Text = TitleBox.Text + "\r\n"; // 0번 줄에는 제목
 
-            SaveTextBox.Text += dateTimePicker1.Value + "\r\n";
+            SaveTextBox.Text += dateTimePicker1.Value + "\r\n"; // 1번 줄에는 날짜
 
-            SaveTextBox.Text += Weather + "\r\n";
+            SaveTextBox.Text += Weather + "\r\n"; // 2번 줄에는 날씨
 
-            SaveTextBox.Text += Tboxes.GetContents() + "\r\n";
+            SaveTextBox.Text += Tboxes.GetContents() + "\r\n"; // 3번 줄부터 n번 줄까지는 내용
 
             return SaveTextBox.Text;
         }
 
-        
-
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void radioButton_CheckedChanged(object sender, EventArgs e)
         {
-            Weather = "맑음";
-            radioButton1.Checked = true;
-        }
+            if (radioButton1.Checked)
+            {
+                Weather = "맑음";
+            }
+            else if (radioButton2.Checked)
+            {
+                Weather = "비";
+            }
+            else
+            {
+                Weather = "눈";
+            }
+            Console.WriteLine(Weather);
 
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
-        {
-            Weather = "비";
-            radioButton2.Checked = true;
-        }
-
-        private void radioButton3_CheckedChanged(object sender, EventArgs e)
-        {
-            Weather = "눈";
-            radioButton3.Checked = true;
         }
 
         public void OpenFile(string filename) // 파일 경로를 받아 파일 경로의 데이터를 받아옴
@@ -184,7 +200,6 @@ namespace Diary
             }
             Tboxes.TextBoxResize();
         }
-            
     }
 
 }
@@ -201,7 +216,9 @@ namespace Suisei
         private Panel panel; // Form1에서 받아온 Panel을 넣음
 
         private Font DefaultFont; // 기본 폰트
-        int BoxHeight = 21; // 폰트 크기가 9일때 TextBox의 기본 높이
+        private int BoxWidth = 800;
+        private int BoxHeight = 21; // 폰트 크기가 9일때 TextBox의 기본 높이
+        private int MaximumTextBox = 150;
 
         public TextBoxes() // 생성자
         {
@@ -233,11 +250,12 @@ namespace Suisei
             {
                 TextBox Tb = new TextBox();
                 Tb.Name = (panel.Controls.Count).ToString(); // 이름 설정
-                Tb.Width = 800; // 너비
+                Tb.Width = BoxWidth; // 너비
                 Tb.Location = new Point(0, TextBoxList.Count * BoxHeight); // 위치
 
                 // 키 이벤트
                 Tb.KeyDown += new KeyEventHandler(Text_KeyDown);
+                Tb.TextChanged += new EventHandler(Text_TextChanged);
 
                 Tb.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
 
@@ -251,14 +269,17 @@ namespace Suisei
 
         public void AddTextBox(int TextBoxCount) // TextBoxCount만큼 박스 추가
         {
+            if (TextBoxList.Count + TextBoxCount > MaximumTextBox) return;
+
             // MakeBoxes와 동일
             for (int i = 0; i < TextBoxCount; ++i)
             {
                 TextBox Tb = new TextBox();
                 Tb.Name = (panel.Controls.Count).ToString();
-                Tb.Width = 800;
+                Tb.Width = BoxWidth;
                 Tb.Location = new Point(0, TextBoxList.Count * BoxHeight);
                 Tb.KeyDown += new KeyEventHandler(Text_KeyDown);
+                Tb.TextChanged += new EventHandler(Text_TextChanged);
                 Tb.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
 
                 TextBoxList.Add(Tb);
@@ -345,5 +366,12 @@ namespace Suisei
             }
             
         }
+
+        private void Text_TextChanged(object sender, EventArgs e)
+        {
+            TextBox Tb= (TextBox)sender;
+            CurrentCursorLoc = Int32.Parse(Tb.Name);
+        }
+
     }
 }
