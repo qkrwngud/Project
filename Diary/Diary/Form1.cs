@@ -100,12 +100,9 @@ namespace Diary
                 System.IO.File.WriteAllText(saveFileDialog1.FileName, GetTextforSave()); // 파일 저장
 
                 // 파일 이름이 비었으면 파일 이름, 경로, 제목 설정
-                if (FileName == "")
-                {
-                    FileName = saveFileDialog1.FileName;
-                    FileTItle = Path.GetFileNameWithoutExtension(FileName);
-                    this.Text = FileTItle;
-                }
+                FileName = saveFileDialog1.FileName;
+                FileTItle = Path.GetFileNameWithoutExtension(FileName);
+                this.Text = FileTItle;
 
             }
         }

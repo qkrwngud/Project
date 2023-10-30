@@ -33,6 +33,8 @@ namespace Diary
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 form = new Form1();
+                form.OpenFile(openFileDialog1.FileName);
+                form.ShowDialog();
             }
         }
     }
