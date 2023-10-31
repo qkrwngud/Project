@@ -19,6 +19,4 @@ C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.csproj.GenerateR
 C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.csproj.CoreCompileInputs.cache
 C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.exe
 C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.pdb
-C:\Users\juhyu\Desktop\Project\Diary\Diary\obj\Debug\Diary.TitleForm.resources
 C:\Users\ai_student\Desktop\Project\Diary\Diary\obj\Debug\Diary.TitleForm.resources
-C:\Users\juhyu\Desktop\Project\Diary\Diary\obj\Debug\Diary.PasswordForm.resources

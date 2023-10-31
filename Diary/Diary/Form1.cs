@@ -28,7 +28,7 @@ namespace Diary
         {
             InitializeComponent();
 
-            this.Text = "테스트";
+            this.Text = "";
             Tboxes.SetPanel(MainTextPanel);
             Tboxes.MakeBoxes(ContentsBoxCount);
 
@@ -63,7 +63,8 @@ namespace Diary
             FileName = "";
             FileTItle = "";
 
-            radioButton1.Checked= false;
+            radioButton1.Checked= true;
+            Weather = "맑음";
             radioButton2.Checked= false;
             radioButton3.Checked= false;
 
